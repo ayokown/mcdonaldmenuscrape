@@ -26,8 +26,8 @@ def get_item_info(id: int) -> tuple[str, str, dict]:
         nutrient_key = nutrient["nutrient_name_id"]
         nutrient_value, nutrient_uom = float(nutrient["value"]), nutrient["uom"]
         nutrition[nutrient_key] = (nutrient_value, nutrient_uom)
-    # Create extra item information with the automated info from abave
-    nutrition["unsaturated_fat"] = nutrition["fat"][0] - (nutrition["saturated_fat"][0] + nutrition["trans_fat"][0])
+        # Create extra item information with the automated info from abave
+        nutrition["unsaturated_fat"] = nutrition["fat"][0] - (nutrition["saturated_fat"][0] + nutrition["trans_fat"][0])
     return (category, name, nutrition)
 
 def create_item_list(path_to_write: str) -> None:
@@ -49,4 +49,5 @@ def create_item_list(path_to_write: str) -> None:
                 }
             })
             break # Break statement for testing how one item will print out
-       menu_file.write(json.dump(menu_json)) # Tutorial used: https://www.geeksforgeeks.org/json-dump-in-python/
+    menu_file.write(json.dump(menu_json)) # Tutorial used: https://www.geeksforgeeks.org/json-dump-in-python/
+       
