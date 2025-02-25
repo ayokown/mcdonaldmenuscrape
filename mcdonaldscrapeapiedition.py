@@ -1,7 +1,7 @@
 """
+THIS IS NOT COMPLETE: Code may not work
 BeautifulSoup code from https://www.geeksforgeeks.org/how-to-scrape-websites-with-beautifulsoup-and-python/
 """
-
 import requests
 import json
 from bs4 import BeautifulSoup
@@ -12,7 +12,6 @@ menu_soup = BeautifulSoup(menu_request.content, "html.parser")
 
 # Gets all menu items avaliable on the webpage. In the HTML code, all menu items have the class "cmp-category__item"
 all_items = menu_soup.find_all(class_="cmp-category__item")
-total_items = 0
 
 # Use McDonalds' API to fetch data about a menu item when given its id.
 def get_item_info(id: int) -> tuple[str, str, dict]:
@@ -31,14 +30,13 @@ def get_item_info(id: int) -> tuple[str, str, dict]:
     nutrition["unsaturated_fat"] = nutrition["fat"][0] - (nutrition["saturated_fat"][0] + nutrition["trans_fat"][0])
     return (category, name, nutrition)
 
-def create_item_list(file_to_write: any) -> None:
-    
+def create_item_list(path_to_write: str) -> None:
+    menu_file = open(path_to_write, "w")
     menu_json = {}
     for item in all_items:
         if item.find_parent(id="maincatcontent"): # Ignores items in the "Featured Favorites" category as they are already in the normal menu
             continue
         else:
-            total_items += 1
             item_id = item["data-product-id"] # Get the id of an item by finding its HTML attributes
             item_info = get_item_info(item_id)
             print(item_info)
@@ -51,3 +49,4 @@ def create_item_list(file_to_write: any) -> None:
                 }
             })
             break # Break statement for testing how one item will print out
+       menu_file.write(json.dump(menu_json)) # Tutorial used: https://www.geeksforgeeks.org/json-dump-in-python/
