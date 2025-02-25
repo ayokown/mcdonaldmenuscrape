@@ -23,7 +23,7 @@ def get_item_info(id: int) -> any:
     category = info["item"]["default_category"]["category"]["name"]
     name = info["item"]["item_name"]
     nutrition = {
-        "calories" : (float(info["item"]["nutrient_facts"]["nutrient"][0]["value"]), "Cal."), # Format is (value, unit_of_measurement)
+        "calories" : (float(info["item"]["nutrient_facts"]["nutrient"][0]["value"]), "Cal."),
         "protien" : (float(info["item"]["nutrient_facts"]["nutrient"][1]["value"]), "g"),
         "carbohydrates" : (float(info["item"]["nutrient_facts"]["nutrient"][2]["value"]), "g"),
         "unsaturated_fat" : (float(info["item"]["nutrient_facts"]["nutrient"][3]["value"]) -  float(info["item"]["nutrient_facts"]["nutrient"][5]["value"]), "g"),
@@ -41,8 +41,11 @@ def get_item_info(id: int) -> any:
         "potassium" : (float(info["item"]["nutrient_facts"]["nutrient"][14]["value"]), "mg"),
         "vitamin_b6" : (float(info["item"]["nutrient_facts"]["nutrient"][15]["value"]), "mg")
     }
+    # Replace above dictionary with loop at bottom
     for nutrient in info["item"]["nutrient_facts"]["nutrient"]:
-        # Incomplete
+        nutrient_key = nutrient["nutrient_name_id"]
+        nutrient_value, nutrient_uom = nutrient["value"], nutrient["uom"]
+        nutrition[nutrient_key] = (nutrient_value, nutrient_uom)
     return (category, name, nutrition)
 
 def create_item_list(filetowrite: any) -> any:
