@@ -22,33 +22,17 @@ def get_item_info(id: int) -> any:
     info = json.loads(request) # Parse the request with the json module so the data can be read as a dictionary
     category = info["item"]["default_category"]["category"]["name"]
     name = info["item"]["item_name"]
-    nutrition = {
-        "calories" : (float(info["item"]["nutrient_facts"]["nutrient"][0]["value"]), "Cal."),
-        "protien" : (float(info["item"]["nutrient_facts"]["nutrient"][1]["value"]), "g"),
-        "carbohydrates" : (float(info["item"]["nutrient_facts"]["nutrient"][2]["value"]), "g"),
-        "unsaturated_fat" : (float(info["item"]["nutrient_facts"]["nutrient"][3]["value"]) -  float(info["item"]["nutrient_facts"]["nutrient"][5]["value"]), "g"),
-        "saturated_fat" : (float(info["item"]["nutrient_facts"]["nutrient"][5]["value"]), "g"),
-        "trans_fat" : (float(info["item"]["nutrient_facts"]["nutrient"][6]["value"]), "g"),
-        "total_fat" : (float(info["item"]["nutrient_facts"]["nutrient"][3]["value"]), "g"),
-        "sodium" : (float(info["item"]["nutrient_facts"]["nutrient"][4]["value"]), "mg"),
-        "cholesterol" : (float(info["item"]["nutrient_facts"]["nutrient"][7]["value"]), "mg"),
-        "fiber" : (float(info["item"]["nutrient_facts"]["nutrient"][8]["value"]), "g"),
-        "added_sugars" : (float(info["item"]["nutrient_facts"]["nutrient"][10]["value"]), "g"),
-        "total_sugars" : (float(info["item"]["nutrient_facts"]["nutrient"][9]["value"]), "g"),
-        "vitamin_d" : (float(info["item"]["nutrient_facts"]["nutrient"][11]["value"]), "mcg"),
-        "calcium" : (float(info["item"]["nutrient_facts"]["nutrient"][12]["value"]), "mg"),
-        "iron" : (float(info["item"]["nutrient_facts"]["nutrient"][13]["value"]), "mg"),
-        "potassium" : (float(info["item"]["nutrient_facts"]["nutrient"][14]["value"]), "mg"),
-        "vitamin_b6" : (float(info["item"]["nutrient_facts"]["nutrient"][15]["value"]), "mg")
-    }
-    # Replace above dictionary with loop at bottom
+    nutrition = {}
+    # Loop through every nutrition value and add it to the nutrition dictionary
     for nutrient in info["item"]["nutrient_facts"]["nutrient"]:
         nutrient_key = nutrient["nutrient_name_id"]
         nutrient_value, nutrient_uom = nutrient["value"], nutrient["uom"]
         nutrition[nutrient_key] = (nutrient_value, nutrient_uom)
+    # Create extra item information with the automated info from abave
+    nutrition["unsaturated_fat"] = nutrition["fat"][0] - (nutrition["saturated_fat"][0] + nutrition["trans_fat"][0])
     return (category, name, nutrition)
 
-def create_item_list(filetowrite: any) -> any:
+def create_item_list(filetowrite?: any) -> any:
     for item in all_items:
         if item.find_parent(id="maincatcontent"): # Ignores items in the "Featured Favorites" category as they are already in the normal menu
             continue
@@ -57,4 +41,6 @@ def create_item_list(filetowrite: any) -> any:
             item_id = item["data-product-id"] # Get the id of an item by finding its HTML attributes
             item_info = get_item_info(item_id)
             print(item_info)
-            break
+            break # Break statement for testing how one item will print out
+
+
