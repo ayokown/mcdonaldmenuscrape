@@ -27,7 +27,6 @@ def get_item_info(id: int) -> tuple[str, str, dict]:
     nutrition = {}
 
     if info["item"]["item_type"] == "Item Collection": # Reassign the request to a different API call that combo items use
-        
         page = f"https://www.mcdonalds.com/dnaapp/itemCollectionDetails?country=US&language=en&showLiveData=true&item={id}"
         request = requests.get(page).content
         info = json.loads(request)
