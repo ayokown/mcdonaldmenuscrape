@@ -41,7 +41,7 @@ def get_item_info(id: int) -> tuple[str, str, dict]:
             nutrition[nutrient_key] = (nutrient_value, nutrient_uom)
     return (category, name, nutrition)
 
-def create_item_list(input_file: any ) -> str:
+def create_item_list(output_file: any ) -> str:
     total_items = 0
     menu_json = {}
     try:
