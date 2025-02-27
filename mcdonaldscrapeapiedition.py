@@ -10,7 +10,7 @@ from pathlib import Path
 menu_request = requests.get("https://www.mcdonalds.com/us/en-us/full-menu.html")
 menu_soup = BeautifulSoup(menu_request.content, "html.parser")
 
-# Gets all menu items avaliable on the webpage. In the HTML code, all menu items have the class "cmp-category__item"
+# Gets all menu items available on the webpage. In the HTML code, all menu items have the class "cmp-category__item"
 all_items = menu_soup.find_all(class_="cmp-category__item")
 
 # Use McDonalds' API to fetch data about a menu item when given its id.
