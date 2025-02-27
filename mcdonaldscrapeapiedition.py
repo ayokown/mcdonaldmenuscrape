@@ -6,7 +6,7 @@ import json
 from bs4 import BeautifulSoup
 from pathlib import Path
 
-# Create a dictionary to store the final information in, then make a GET request to parse the website's HTML through BeautifulSoup
+# Make a GET request to parse the website's HTML through BeautifulSoup
 menu_request = requests.get("https://www.mcdonalds.com/us/en-us/full-menu.html")
 menu_soup = BeautifulSoup(menu_request.content, "html.parser")
 
