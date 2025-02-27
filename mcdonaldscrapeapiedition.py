@@ -20,11 +20,12 @@ def get_item_info(id: int) -> tuple[str, str, dict]:
     info = json.loads(request) # Parse the request with the json module so the data can be read as a dictionary
     name = info["item"]["item_name"]
     category = ""
+    nutrition = {}
+    
     if "category" in info["item"]["default_category"]: # Compensate for items with no category or the script will crash
         category = info["item"]["default_category"]["category"]["name"]
     else:
         category = "Miscellaneous"
-    nutrition = {}
 
     if info["item"]["item_type"] == "Item Collection": # Reassign the request to a different API call that combo items use
         page = f"https://www.mcdonalds.com/dnaapp/itemCollectionDetails?country=US&language=en&showLiveData=true&item={id}"
@@ -41,7 +42,7 @@ def get_item_info(id: int) -> tuple[str, str, dict]:
             nutrition[nutrient_key] = (nutrient_value, nutrient_uom)
     return (category, name, nutrition)
 
-def create_item_list(output_file: any ) -> str:
+def create_item_list(output_file: any) -> str:
     total_items = 0
     menu_json = {}
     try:
@@ -59,7 +60,7 @@ def create_item_list(output_file: any ) -> str:
                 print(item_info[1])
                 total_items += 1
         menu_json["total_items"] = total_items
-        json.dump(menu_json, input_file, indent=2) # Resource used: https://www.geeksforgeeks.org/json-dump-in-python/ Indent is used to make the file visually appealing
+        json.dump(menu_json, output_file, indent=2) # Resource used: https://www.geeksforgeeks.org/json-dump-in-python/ Indent is used to make the file visually appealing
         return "Success"
     except Exception as err:
         return f"Error occured: {err}"
